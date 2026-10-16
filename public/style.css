@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+body {
+  background: #fff0f6;
+  color: #333;
+  min-height: 100vh;
+}
+.topbar {
+  background: #ff4f9a;
+  color: white;
+  padding: 16px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.topbar h1 { font-size: 25px; }
+.layout {
+  width: min(760px, 94%);
+  margin: 28px auto;
+  display: grid;
+  gap: 20px;
+}
+.panel {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px #e9b9ce55;
+}
+h2 { font-size: 21px; margin-bottom: 15px; }
+textarea, input[type="text"] {
+  width: 100%;
+  border: 1px solid #ff9cbe;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+}
+textarea { min-height: 100px; resize: vertical; }
+button {
+  background: #ff4f9a;
+  color: white;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+button:hover { background: #e83482; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.small-button { padding: 7px 12px; }
+.form-bottom, .section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+#charCount, .hint { color: #777; font-size: 13px; }
+.visibility-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 14px;
+}
+.visibility-options label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.message { color: #d81b70; margin-top: 10px; }
+.post {
+  border: 1px solid #ffd1e2;
+  background: #fff7fa;
+  padding: 16px;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.post h3 { color: #df287c; margin-bottom: 5px; }
+.post-content { margin: 12px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.visibility-label { font-size: 13px; color: #777; margin-top: 5px; }
+.person-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f4d7e3;
+}
+.person-name { padding: 6px 0; }
+.followers-heading { margin-top: 22px; }
+.hidden { display: none; }
+@media (max-width: 520px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .panel { padding: 17px; }
+  .visibility-options { flex-direction: column; gap: 10px; }
+}
