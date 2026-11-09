@@ -4,56 +4,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Micro Blog - Login</title>
+
   <link rel="stylesheet" href="style.css">
 
-  
-<style>
-  .login-panel {
-    max-width: 420px;
-    margin: 12vh auto;
-    padding: 24px;
-  }
+  <style>
+    .login-panel {
+      max-width: 420px;
+      margin: 12vh auto;
+      padding: 24px;
+    }
 
-  .login-panel input {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    margin: 12px 0;
-    font-size: 16px;
-    border: 1px solid #ff4b9b;
-    border-radius: 8px;
-    outline: none;
-  }
+    #username,
+    #password {
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 12px !important;
+      margin: 12px 0 !important;
+      font-size: 16px !important;
+      height: 48px !important;
+      border: 1px solid #ff4b9b !important;
+      border-radius: 8px !important;
+      background: white !important;
+      outline: none !important;
+    }
 
-  .login-panel input:focus {
-    border-color: #ff2388;
-  }
+    #username:focus,
+    #password:focus {
+      border-color: #ff2388 !important;
+    }
 
-  .login-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-  }
+    .login-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
 
-  .login-buttons button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-</style>
+    .login-buttons button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
+    #error {
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
+
   <main class="panel login-panel">
+
     <h1>Micro Blog</h1>
+
     <p class="hint">Login or create your account.</p>
 
     <form id="loginForm">
+
       <input
         type="text"
         id="username"
@@ -72,14 +85,24 @@
       >
 
       <div class="login-buttons">
-        <button type="submit" value="login">Login</button>
-        <button type="submit" value="signup">Sign Up</button>
+
+        <button type="submit" value="login">
+          Login
+        </button>
+
+        <button type="submit" value="signup">
+          Sign Up
+        </button>
+
       </div>
+
     </form>
 
     <p id="error" class="message"></p>
+
   </main>
 
   <script src="login.js"></script>
+
 </body>
 </html>
