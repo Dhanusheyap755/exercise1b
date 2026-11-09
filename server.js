@@ -8,7 +8,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, "data.json");
 
-// Middleware
 app.use(express.json());
 
 // CORS
@@ -24,10 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Database functions
+// DATABASE
 function readData() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(
@@ -54,7 +52,6 @@ function saveData(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-// Helpers
 function cleanName(name) {
   return String(name || "")
     .trim()
@@ -104,9 +101,7 @@ app.post("/api/signup", async (req, res) => {
       username
     });
   } catch (error) {
-    res.status(500).json({
-      error: "Signup failed."
-    });
+    res.status(500).json({ error: "Signup failed." });
   }
 });
 
@@ -115,12 +110,6 @@ app.post("/api/login", async (req, res) => {
   try {
     const username = cleanName(req.body.username);
     const password = String(req.body.password || "");
-
-    if (!username || !password) {
-      return res.status(400).json({
-        error: "Enter username and password."
-      });
-    }
 
     const data = readData();
 
@@ -138,7 +127,7 @@ app.post("/api/login", async (req, res) => {
 
     if (!storedPassword) {
       return res.status(401).json({
-        error: "This account has no password. Please sign up with a new username."
+        error: "This account has no password. Please sign up again."
       });
     }
 
@@ -158,32 +147,58 @@ app.post("/api/login", async (req, res) => {
       message: "Login successful!"
     });
   } catch (error) {
-    res.status(500).json({
-      error: "Login failed."
-    });
+    res.status(500).json({ error: "Login failed." });
   }
 });
 
-// GET ALL POSTS
+// GET POSTS
 app.get("/api/posts", (req, res) => {
   const data = readData();
+  const viewer = String(req.query.viewer || "").toLowerCase();
 
-  const posts = data.posts.map(post => ({
-    ...post,
-    likes: post.likes || []
-  }));
+  const visiblePosts = data.posts
+    .filter(post => {
+      if (post.visibility !== "followers") return true;
 
-  res.json(posts);
+      if (post.author.toLowerCase() === viewer) return true;
+
+      return data.follows.some(
+        follow =>
+          follow.from.toLowerCase() === viewer &&
+          follow.to.toLowerCase() === post.author.toLowerCase()
+      );
+    })
+    .map(post => {
+      const likes = post.likes || [];
+
+      return {
+        ...post,
+        likeCount: likes.length,
+        likedByMe: likes.some(
+          user => user.toLowerCase() === viewer
+        )
+      };
+    });
+
+  res.json({ posts: visiblePosts });
 });
 
 // CREATE POST
 app.post("/api/posts", (req, res) => {
-  const username = cleanName(req.body.username);
+  const author = cleanName(req.body.author);
   const content = String(req.body.content || "").trim();
+  const visibility =
+    req.body.visibility === "followers" ? "followers" : "public";
 
-  if (!username || !content) {
+  if (!author || !content) {
     return res.status(400).json({
-      error: "Username and post content are required."
+      error: "Author and post content are required."
+    });
+  }
+
+  if (content.length > 500) {
+    return res.status(400).json({
+      error: "Post cannot exceed 500 characters."
     });
   }
 
@@ -191,28 +206,22 @@ app.post("/api/posts", (req, res) => {
 
   const post = {
     id: Date.now().toString(),
-    username,
+    author,
     content,
+    visibility,
     likes: [],
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toLocaleString()
   };
 
   data.posts.unshift(post);
   saveData(data);
 
-  res.status(201).json(post);
+  res.status(201).json({ post });
 });
 
-// LIKE / UNLIKE POST
+// LIKE / UNLIKE
 app.post("/api/posts/:id/like", (req, res) => {
   const username = cleanName(req.body.username);
-
-  if (!username) {
-    return res.status(400).json({
-      error: "Username is required."
-    });
-  }
-
   const data = readData();
 
   const post = data.posts.find(
@@ -220,12 +229,16 @@ app.post("/api/posts/:id/like", (req, res) => {
   );
 
   if (!post) {
-    return res.status(404).json({
-      error: "Post not found."
-    });
+    return res.status(404).json({ error: "Post not found." });
   }
 
   post.likes = post.likes || [];
+
+  if (post.author.toLowerCase() === username.toLowerCase()) {
+    return res.status(400).json({
+      error: "You cannot like your own post."
+    });
+  }
 
   const alreadyLiked = post.likes.some(
     user => user.toLowerCase() === username.toLowerCase()
@@ -242,44 +255,42 @@ app.post("/api/posts/:id/like", (req, res) => {
   saveData(data);
 
   res.json({
-    message: alreadyLiked ? "Like removed." : "Post liked.",
-    likes: post.likes
+    likeCount: post.likes.length,
+    likedByMe: !alreadyLiked
   });
 });
 
-// GET ALL USERS
+// GET USERS
 app.get("/api/users", (req, res) => {
   const data = readData();
-  res.json(data.users);
+  res.json({ users: data.users });
 });
 
 // GET FOLLOWING
 app.get("/api/following", (req, res) => {
-  const username = cleanName(req.query.username);
-
+  const username = cleanName(req.query.username).toLowerCase();
   const data = readData();
 
   const following = data.follows
-    .filter(item => item.from.toLowerCase() === username.toLowerCase())
+    .filter(item => item.from.toLowerCase() === username)
     .map(item => item.to);
 
-  res.json(following);
+  res.json({ following });
 });
 
 // GET FOLLOWERS
 app.get("/api/followers", (req, res) => {
-  const username = cleanName(req.query.username);
-
+  const username = cleanName(req.query.username).toLowerCase();
   const data = readData();
 
   const followers = data.follows
-    .filter(item => item.to.toLowerCase() === username.toLowerCase())
+    .filter(item => item.to.toLowerCase() === username)
     .map(item => item.from);
 
-  res.json(followers);
+  res.json({ followers });
 });
 
-// FOLLOW / UNFOLLOW USER
+// FOLLOW / UNFOLLOW
 app.post("/api/follow", (req, res) => {
   const from = cleanName(req.body.from);
   const to = cleanName(req.body.to);
@@ -298,11 +309,11 @@ app.post("/api/follow", (req, res) => {
 
   const data = readData();
 
-  const targetUserExists = data.users.some(
+  const targetExists = data.users.some(
     user => user.toLowerCase() === to.toLowerCase()
   );
 
-  if (!targetUserExists) {
+  if (!targetExists) {
     return res.status(404).json({
       error: "User not found."
     });
@@ -329,8 +340,8 @@ app.post("/api/follow", (req, res) => {
   saveData(data);
 
   res.json({
-    message: alreadyFollowing ? "Unfollowed." : "Following.",
-    following: !alreadyFollowing
+    following: !alreadyFollowing,
+    message: alreadyFollowing ? "Unfollowed." : "Following."
   });
 });
 
