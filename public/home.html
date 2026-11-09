@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro Blog</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Micro Blog</h1>
+    <div>Logged in as <strong id="currentUser"></strong>
+      <button id="logoutBtn" class="small-button">Logout</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Create a post</h2>
+      <form id="postForm">
+        <textarea id="postText" maxlength="500" placeholder="Write your post..." required></textarea>
+        <div class="visibility-options">
+          <label><input type="radio" name="visibility" value="public" checked> 🌍 Public</label>
+          <label><input type="radio" name="visibility" value="followers"> 👥 Followers only</label>
+        </div>
+        <div class="form-bottom">
+          <span id="charCount">0 / 500</span>
+          <button type="submit">Post</button>
+        </div>
+      </form>
+      <p id="message" class="message"></p>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <h2>All Posts</h2>
+        <button id="refreshBtn" class="small-button">Refresh</button>
+      </div>
+      <div id="feed"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <h2>People</h2>
+        <button id="peopleBtn" class="small-button">Refresh</button>
+      </div>
+      <p class="hint">Follow your friends here.</p>
+      <div id="people"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Following</h2>
+      <div id="followingList"></div>
+      <h2 class="followers-heading">Followers</h2>
+      <div id="followersList"></div>
+    </section>
+  </main>
+  <script src="home.js"></script>
+</body>
+</html>

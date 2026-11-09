@@ -1,0 +1,48 @@
+{
+  "users": [
+    "Dhanushya",
+    "Priya"
+  ],
+  "posts": [
+    {
+      "id": "1792118436729",
+      "author": "Dhanushya",
+      "content": "hello all",
+      "visibility": "public",
+      "createdAt": "16/10/2026, 8:10:36 am",
+      "likes": []
+    },
+    {
+      "id": "1792118461543",
+      "author": "Priya",
+      "content": "hii",
+      "visibility": "public",
+      "createdAt": "16/10/2026, 8:11:01 am",
+      "likes": [
+        "Dhanushya"
+      ]
+    },
+    {
+      "id": "1792118475458",
+      "author": "Priya",
+      "content": "hi",
+      "visibility": "followers",
+      "createdAt": "16/10/2026, 8:11:15 am",
+      "likes": []
+    },
+    {
+      "id": "1792118505139",
+      "author": "Dhanushya",
+      "content": "i am dhanu",
+      "visibility": "followers",
+      "createdAt": "16/10/2026, 8:11:45 am",
+      "likes": []
+    }
+  ],
+  "follows": [
+    {
+      "from": "Priya",
+      "to": "Dhanushya"
+    }
+  ]
+}
