@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,22 +6,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Micro Blog - Login</title>
   <link rel="stylesheet" href="style.css">
+
   <style>
-    .login-panel { max-width: 420px; margin: 12vh auto; }
-    .login-panel input { margin: 12px 0; }
-    .login-panel button { width: 100%; }
+    .login-panel {
+      max-width: 420px;
+      margin: 12vh auto;
+    }
+
+    .login-panel input {
+      margin: 12px 0;
+    }
+
+    .login-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .login-buttons button {
+      flex: 1;
+    }
   </style>
 </head>
+
 <body>
   <main class="panel login-panel">
     <h1>Micro Blog</h1>
-    <p class="hint">Enter your username to continue.</p>
+    <p class="hint">Login or create your account.</p>
+
     <form id="loginForm">
-      <input type="text" id="username" maxlength="25" placeholder="Your username" required>
-      <button type="submit">Login</button>
+      <input
+        type="text"
+        id="username"
+        maxlength="25"
+        placeholder="Username"
+        autocomplete="username"
+        required
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        required
+      >
+
+      <div class="login-buttons">
+        <button type="submit" value="login">Login</button>
+        <button type="submit" value="signup">Sign Up</button>
+      </div>
     </form>
+
     <p id="error" class="message"></p>
   </main>
+
   <script src="login.js"></script>
 </body>
 </html>
