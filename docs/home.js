@@ -42,7 +42,7 @@ postForm.addEventListener("submit", async function (event) {
   event.preventDefault();
   const visibility = document.querySelector('input[name="visibility"]:checked').value;
   try {
-    await request("/api/posts", {
+    await request("https://exercise1b.onrender.com/api/posts", {
       method: "POST",
       body: JSON.stringify({
         author: currentUser,
@@ -64,7 +64,7 @@ peopleBtn.addEventListener("click", loadPeople);
 
 async function loadPosts() {
   try {
-    const data = await request("/api/posts?viewer=" + encodeURIComponent(currentUser));
+    const data = await request("https://exercise1b.onrender.com/api/posts?viewer=" + encodeURIComponent(currentUser));
     feed.innerHTML = "";
     if (data.posts.length === 0) {
       feed.textContent = "No posts yet.";
@@ -97,7 +97,7 @@ async function loadPosts() {
 
       likeButton.addEventListener("click", async function () {
         try {
-          await request("/api/posts/" + post.id + "/like", {
+          await request("https://exercise1b.onrender.com/api/posts/" + post.id + "/like", {
             method: "POST",
             body: JSON.stringify({ username: currentUser })
           });
@@ -117,8 +117,8 @@ async function loadPosts() {
 
 async function loadPeople() {
   try {
-    const result = await request("/api/users");
-    const followResult = await request("/api/following?username=" + encodeURIComponent(currentUser));
+    const result = await request("https://exercise1b.onrender.com/api/users");
+    const followResult = await request("https://exercise1b.onrender.com/api/following?username=" + encodeURIComponent(currentUser));
     const following = followResult.following.map(name => name.toLowerCase());
     people.innerHTML = "";
 
@@ -137,7 +137,7 @@ async function loadPeople() {
 
         button.addEventListener("click", async function () {
           try {
-            await request("/api/follow", {
+            await request("https://exercise1b.onrender.com/api/follow", {
               method: "POST",
               body: JSON.stringify({ from: currentUser, to: name })
             });
@@ -152,8 +152,8 @@ async function loadPeople() {
       });
     }
 
-    const followingData = await request("/api/following?username=" + encodeURIComponent(currentUser));
-    const followersData = await request("/api/followers?username=" + encodeURIComponent(currentUser));
+    const followingData = await request("https://exercise1b.onrender.com/api/following?username=" + encodeURIComponent(currentUser));
+    const followersData = await request("https://exercise1b.onrender.com/api/followers?username=" + encodeURIComponent(currentUser));
     showNames(followingList, followingData.following, "You are not following anyone yet.");
     showNames(followersList, followersData.followers, "You do not have any followers yet.");
   } catch (err) {
